@@ -12,4 +12,4 @@
      
     $> git clone git@github.com:alexbluesky/python-tools.git
     
-    $> python app/decode_url_name.py folder #执行该命令后，将会把folder文件夹下的文件名称全部转为正常中文
+    $> python app/decode_url_name.py file_or_folder 
