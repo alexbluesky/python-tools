@@ -5,14 +5,17 @@
 """
 import argparse
 import os
-import sys
 from urllib.parse import unquote
+
+parser = argparse.ArgumentParser(description='将URLEncode编码的文件名解码为正常字符')
+parser.add_argument('file_or_folder', nargs=1, default=os.getcwd(),
+                    type=str, help='需要解码文件或其所在的目录')
 
 
 def decode_directory_files(folder):
-    folder = os.path.expanduser(folder) if folder[0] == '~' else folder
-    if not os.path.isdir(folder):
-        print('not a folder')
+    folder = os.path.expanduser(folder) if folder[0] == '~' else folder  # 获取绝对路径
+    if not (os.path.isdir(folder) or os.path.isfile(folder)):
+        parser.print_usage()
     elif os.path.isfile(folder):
         decode_file(os.path.basename(folder), os.path.dirname(folder), 1)
     else:
@@ -29,17 +32,8 @@ def decode_file(f, folder, i):
         os.rename(before, after)
     except Exception as e:
         print(e)
-        exit(0)
 
-
-parser = argparse.ArgumentParser(description='将URLEncode编码的文件名解码为正常字符')
-parser.add_argument('folder', nargs=1,
-                    type=str, help='需要解码文件所在的目录')
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    folder = getattr(args, 'folder')[0]
-    decode_directory_files(folder)
-    # args = sys.argv
-    # if args[0] == '-h':
-    # decode_directory_files('~/Downloads')
+    decode_directory_files(getattr(args, 'file_or_folder')[0])
